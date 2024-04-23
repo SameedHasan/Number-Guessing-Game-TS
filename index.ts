@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // npm i inquirer
 // npm i @types/inquirer -D
 // npm i @types/node -D
