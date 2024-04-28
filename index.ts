@@ -5,16 +5,29 @@
 // npm i @types/node -D
 import inquirer from "inquirer";
 
-const numberToGuess = Math.floor(Math.random() * 10);
 function isValidSingleDigit(input: string): boolean {
   const regex = /^[0-9]$/;
   return regex.test(input);
 }
-// console.log("numberToGuess :>> ", numberToGuess);
 
-// Main function to handle user input
+function getNumber(): number {
+  return Math.floor(Math.random() * 10);
+}
+
+async function isPlayAgain(): Promise<boolean> {
+  const answer = await inquirer.prompt({
+    type: "list",
+    name: "choice",
+    message: "Do you want to play again? :",
+    choices: ["Yes", "No"],
+  });
+  return answer.choice === "Yes" ? true : false;
+}
+
+// Main function to handle user inputyou
 async function main() {
   // Interactive menu
+  let numberToGuess = getNumber();
   while (true) {
     const answers = await inquirer.prompt([
       {
@@ -33,7 +46,13 @@ async function main() {
 
     if (Number(answers.num) === numberToGuess) {
       console.log(`Congratulations! The number you have guessed is correct.`);
-      break;
+      const playAgain = await isPlayAgain();
+      if (playAgain) {
+        numberToGuess = getNumber();
+      } else {
+        break;
+      }
+      // break;
     } else {
       console.log(`Oops! The number you have guessed is incorrect.Try Again.`);
     }
