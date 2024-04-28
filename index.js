@@ -10,11 +10,11 @@ function isValidSingleDigit(input) {
 function getNumber() {
     return Math.floor(Math.random() * 10);
 }
-async function isPlayAgain() {
+async function isPlayAgain(msg) {
     const answer = await inquirer.prompt({
         type: "list",
         name: "choice",
-        message: "Do you want to play again? :",
+        message: `Do you want to ${msg} again? :`,
         choices: ["Yes", "No"],
     });
     return answer.choice === "Yes" ? true : false;
@@ -41,7 +41,7 @@ async function main() {
         ]);
         if (Number(answers.num) === numberToGuess) {
             console.log(`Congratulations! The number you have guessed is correct.`);
-            const playAgain = await isPlayAgain();
+            const playAgain = await isPlayAgain("play");
             if (playAgain) {
                 numberToGuess = getNumber();
             }
@@ -52,6 +52,10 @@ async function main() {
         }
         else {
             console.log(`Oops! The number you have guessed is incorrect.Try Again.`);
+            const playAgain = await isPlayAgain("try");
+            if (!playAgain) {
+                break;
+            }
         }
     }
 }
